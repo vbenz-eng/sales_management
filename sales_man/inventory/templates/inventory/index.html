@@ -3,9 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Vision Billing System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'inventory/styles.css' %}">
 </head>
 <body>
-    
+    <header class="app-header">
+        <div class="brand">
+            <span class="brand-mark">V</span>
+            <div class="brand-text">
+                <h1>Vision Enterprise Billing</h1>
+                <p>Point of sale &amp; stock ledger</p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="tabs" role="tablist">
+        <button class="tab active" role="tab" aria-selected="true" aria-controls="panel-sell" data-target="panel-sell">
+            Sell
+        </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-inventory" data-target="panel-inventory">
+            Inventory overview
+        </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-add-stock" data-target="panel-add-stock">
+            Add stock
+        </button>
+    </nav>
+
+    <main class="panels">
+        <section id="panel-sell" class="panel active" role="tabpanel">
+            <div class="panel-head">
+                <h2>Sell</h2>
+                <p>Ring up items and close out a sale.</p>
+            </div>
+            <div class="placeholder-card">
+                <p>No items added to this sale yet.</p>
+                <button class="btn-primary" type="button">Add item</button>
+            </div>
+        </section>
+
+        <section id="panel-inventory" class="panel" role="tabpanel" hidden>
+            <div class="panel-head">
+                <h2>Inventory overview</h2>
+                <p>Current stock levels across all items.</p>
+            </div>
+            {% if inventory %}
+                <table class="inventory-table" style="text-align: left;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in inventory %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.description }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>Ksh {{ item.price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="placeholder-card">
+                    <p>No inventory items yet. Add stock to see it listed here.</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <section id="panel-add-stock" class="panel" role="tabpanel" hidden>
+            <div class="panel-head">
+                <h2>Add stock</h2>
+                <p>Record new stock coming into the shop.</p>
+            </div>
+            <form method="post" class="stock-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn-primary" type="submit">Save item</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>© 2026 Vision Billing System. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'inventory/script.js' %}"></script>
 </body>
 </html>

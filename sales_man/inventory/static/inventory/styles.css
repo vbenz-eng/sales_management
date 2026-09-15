@@ -1,0 +1,200 @@
+:root {
+    --ink: #16241f;
+    --teal: #1f5c4d;
+    --teal-dark: #163f35;
+    --amber: #b8843c;
+    --paper: #f5f4f0;
+    --card: #ffffff;
+    --line: #d8d6cd;
+    --muted: #5c665f;
+    --font-ui: 'IBM Plex Sans', sans-serif;
+    --font-num: 'IBM Plex Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-ui);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.app-header {
+    background: var(--teal-dark);
+    color: #fff;
+    padding: 20px 28px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.brand-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--amber);
+    color: var(--teal-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-num);
+    font-weight: 600;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.brand-text h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.brand-text p {
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: #cfe0da;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 4px;
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--line);
+}
+
+.tab {
+    appearance: none;
+    border: none;
+    background: transparent;
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--muted);
+    padding: 14px 18px 12px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab:hover {
+    color: var(--ink);
+    scale: 90% 105%;
+}
+
+.tab.active {
+    color: var(--teal);
+    border-bottom-color: var(--teal);
+    font-weight: 600;
+}
+
+.tab:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+}
+
+/* Panels */
+.panels {
+    flex: 1;
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 28px;
+}
+
+.panel[hidden] {
+    display: none;
+}
+
+.panel-head h2 {
+    margin: 0 0 4px;
+    font-size: 1.35rem;
+}
+
+.panel-head p {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.placeholder-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 32px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.placeholder-card p {
+    margin: 0 0 16px;
+}
+
+.btn-primary {
+    appearance: none;
+    border: none;
+    background: var(--teal);
+    color: #fff;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-primary:hover {
+    background: var(--teal-dark);
+}
+
+/* Footer */
+.app-footer {
+    border-top: 1px solid var(--line);
+    padding: 16px 28px;
+    text-align: center;
+}
+
+.app-footer p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+    .tabs {
+        overflow-x: auto;
+        padding: 0 16px;
+    }
+
+    .tab {
+        white-space: nowrap;
+        padding: 12px 14px 10px;
+    }
+
+    .panels {
+        padding: 20px 16px;
+    }
+
+    .app-header {
+        padding: 16px 20px;
+    }
+}
