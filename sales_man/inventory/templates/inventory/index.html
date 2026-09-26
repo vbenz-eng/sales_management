@@ -30,6 +30,12 @@
         <button class="tab" role="tab" aria-selected="false" aria-controls="panel-add-stock" data-target="panel-add-stock">
             Add stock
         </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-del-stock" data-target="panel-del-stock">
+            Del stock
+        </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-history" data-target="panel-history">
+            Sales history
+        </button>
     </nav>
 
     <main class="panels">
@@ -38,10 +44,55 @@
                 <h2>Sell</h2>
                 <p>Ring up items and close out a sale.</p>
             </div>
-            <div class="placeholder-card">
-                <p>No items added to this sale yet.</p>
-                <button class="btn-primary" type="button">Add item</button>
-            </div>
+
+            <form method="post" class="stock-form">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="sell_add">
+                {{ sell_form.as_p }}
+                <button class="btn-primary" type="submit">Add item</button>
+            </form>
+
+            {% if cart_lines %}
+                <table class="inventory-table" style="text-align: left; margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for line in cart_lines %}
+                        <tr>
+                            <td>{{ line.item.name }}</td>
+                            <td>{{ line.quantity }}</td>
+                            <td>Ksh {{ line.subtotal }}</td>
+                            <td>
+                                <form method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="form_type" value="sell_remove">
+                                    <input type="hidden" name="item_id" value="{{ line.item.pk }}">
+                                    <button class="btn-primary" type="submit">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <p style="margin-top: 16px; font-weight: 600;">Total: Ksh {{ cart_total }}</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="sell_checkout">
+                    <button class="btn-primary" type="submit">Checkout</button>
+                </form>
+            {% else %}
+                <div class="placeholder-card" style="margin-top: 20px;">
+                    <p>No items added to this sale yet.</p>
+                </div>
+            {% endif %}
         </section>
 
         <section id="panel-inventory" class="panel" role="tabpanel" hidden>
@@ -84,9 +135,66 @@
             </div>
             <form method="post" class="stock-form">
                 {% csrf_token %}
+                <input type="hidden" name="form_type" value="add">
                 {{ form.as_p }}
                 <button class="btn-primary" type="submit">Save item</button>
             </form>
+        </section>
+
+        
+        <section id="panel-del-stock" class="panel" role="tabpanel" hidden>
+            <div class="panel-head">
+                <h2>Del stock</h2>
+                <p>Remove selected stock from the shop.</p>
+            </div>
+            <form method="post" class="stock-form">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="delete">
+                {{ delete_form.as_p }}
+                <button class="btn-primary" type="submit">Del item</button>
+            </form>
+        </section>
+
+        <section id="panel-history" class="panel" role="tabpanel" hidden>
+            <div class="panel-head">
+                <h2>Sales history</h2>
+                <p>Past sales, newest first.</p>
+            </div>
+            {% if sales_history %}
+                {% for sale in sales_history %}
+                <table class="inventory-table" style="text-align: left; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th colspan="3">
+                                Sale #{{ sale.pk }} — {{ sale.created_at|date:"N j, Y, P" }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for line in sale.items.all %}
+                        <tr>
+                            <td>{{ line.inventory_item.name }}</td>
+                            <td>{{ line.quantity }}</td>
+                            <td>Ksh {{ line.subtotal }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="2" style="font-weight: 600;">Total</td>
+                            <td style="font-weight: 600;">Ksh {{ sale.total }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endfor %}
+            {% else %}
+                <div class="placeholder-card">
+                    <p>No sales recorded yet.</p>
+                </div>
+            {% endif %}
         </section>
     </main>
 

@@ -96,7 +96,7 @@ body {
 
 .tab:hover {
     color: var(--ink);
-    scale: 90% 105%;
+    scale: 105%;
 }
 
 .tab.active {
